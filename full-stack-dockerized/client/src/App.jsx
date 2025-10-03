@@ -6,32 +6,37 @@ import Dashboard from './pages/Dashboard'
 import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import Header from './components/Header'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
+    <>
+      <Header />
+      <Routes>
 
-      {/* Protected routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/sandbox"
-        element={
-          <ProtectedRoute>
-            <SandboxRoom />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sandbox"
+          element={
+            <ProtectedRoute>
+              <SandboxRoom />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
+
   )
 }
 

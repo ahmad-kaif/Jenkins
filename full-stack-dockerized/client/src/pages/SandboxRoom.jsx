@@ -6,59 +6,26 @@ const SandboxRoom = () => {
   const [sandboxes, setSandboxes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all sandboxes
+  // === API Functions (stubbed for now) ===
   const fetchSandboxes = async () => {
-    // try {
-    //   const response = await fetch('http://localhost:3000/api/sandboxes');
-    //   const data = await response.json();
-    //   setSandboxes(data);
-    //   setLoading(false);
-    // } catch (err) {
-    //   console.error('Error fetching sandboxes:', err);
-    //   setLoading(false);
-    // }
+    // Simulated delay for demo
+    setTimeout(() => {
+      setSandboxes([{ id: 1, name: "Sandbox 1" }, { id: 2, name: "Sandbox 2" }]);
+      setLoading(false);
+    }, 1000);
   };
 
-  // Create new sandbox
   const createSandbox = async () => {
-    // try {
-    //   const response = await fetch('http://localhost:3000/api/create-sandbox', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ name: `Sandbox ${sandboxes.length + 1}` }),
-    //   });
-    //   const newSandbox = await response.json();
-    //   setSandboxes([...sandboxes, newSandbox]);
-    // } catch (err) {
-    //   console.error('Error creating sandbox:', err);
-    // }
+    const newSandbox = { id: Date.now(), name: `Sandbox ${sandboxes.length + 1}` };
+    setSandboxes([...sandboxes, newSandbox]);
   };
 
-  // Delete sandbox
   const deleteSandbox = async (id) => {
-    // try {
-    //   await fetch(`http://localhost:3000/api/sandbox/${id}`, {
-    //     method: 'DELETE',
-    //   });
-    //   setSandboxes(sandboxes.filter(sb => sb.id !== id));
-    // } catch (err) {
-    //   console.error('Error deleting sandbox:', err);
-    // }
+    setSandboxes(sandboxes.filter(sb => sb.id !== id));
   };
 
-  // Update sandbox
   const updateSandbox = async (id, newName) => {
-    // try {
-    //   const response = await fetch(`http://localhost:3000/api/sandbox/${id}`, {
-    //     method: 'PUT',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ name: newName }),
-    //   });
-    //   const updatedSandbox = await response.json();
-    //   setSandboxes(sandboxes.map(sb => sb.id === id ? updatedSandbox : sb));
-    // } catch (err) {
-    //   console.error('Error updating sandbox:', err);
-    // }
+    setSandboxes(sandboxes.map(sb => sb.id === id ? { ...sb, name: newName } : sb));
   };
 
   useEffect(() => {
@@ -66,21 +33,32 @@ const SandboxRoom = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold underline mb-4">Sandbox Room</h1>
-      <p className="mb-6">Manage your sandboxes here:</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100 px-6 py-12 flex flex-col items-center">
+      <div className="max-w-4xl w-full bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-700">
+        
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
+            Sandbox Room
+          </h1>
+          <NewSandboxButton createSandbox={createSandbox} />
+        </div>
 
-      <NewSandboxButton createSandbox={createSandbox} />
+        <p className="text-gray-300 mb-6">
+          Manage your personal SQL sandboxes here. You can create, update, or delete them anytime.
+        </p>
 
-      {loading ? (
-        <p>Loading sandboxes...</p>
-      ) : (
-        <SandboxList
-          sandboxes={sandboxes}
-          deleteSandbox={deleteSandbox}
-          updateSandbox={updateSandbox}
-        />
-      )}
+        {loading ? (
+          <p className="text-gray-400 animate-pulse">⏳ Loading sandboxes...</p>
+        ) : sandboxes.length === 0 ? (
+          <p className="text-gray-400 italic">No sandboxes yet. Click <span className="text-blue-400">Create</span> to get started.</p>
+        ) : (
+          <SandboxList
+            sandboxes={sandboxes}
+            deleteSandbox={deleteSandbox}
+            updateSandbox={updateSandbox}
+          />
+        )}
+      </div>
     </div>
   );
 };
