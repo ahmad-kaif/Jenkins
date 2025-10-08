@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import SandboxList from "../components/SandboxList";
 import NewSandboxButton from "../components/NewSandboxButton";
 
-const API_URL = "http://localhost:5000/api/sandbox";
+const API_URL = "/api/sandbox"; // relative path works with Vite proxy
 
 const SandboxRoom = () => {
   const [sandboxes, setSandboxes] = useState([]);
@@ -33,7 +33,7 @@ const SandboxRoom = () => {
         name,
         description,
       });
-      setSandboxes([newSandbox, ...sandboxes]);
+      setSandboxes(prev => [newSandbox, ...prev]); // functional update
     } catch (error) {
       console.error("❌ Error creating sandbox:", error.response?.data || error.message);
     }
@@ -50,7 +50,7 @@ const SandboxRoom = () => {
         name: newName,
         description: newDescription,
       });
-      setSandboxes(sandboxes.map((sb) => (sb.id === id ? updated : sb)));
+      setSandboxes(prev => prev.map(sb => (sb.id === id ? updated : sb))); // functional update
     } catch (error) {
       console.error("❌ Error updating sandbox:", error.response?.data || error.message);
     }
@@ -62,7 +62,7 @@ const SandboxRoom = () => {
 
     try {
       await axios.delete(`${API_URL}/delete/${id}`);
-      setSandboxes(sandboxes.filter((sb) => sb.id !== id));
+      setSandboxes(prev => prev.filter(sb => sb.id !== id)); // functional update
     } catch (error) {
       console.error("❌ Error deleting sandbox:", error.response?.data || error.message);
     }
